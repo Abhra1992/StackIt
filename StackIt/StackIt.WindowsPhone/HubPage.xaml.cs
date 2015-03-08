@@ -78,6 +78,8 @@ namespace StackIt
         /// session.  The state will be null the first time a page is visited.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            var sites = await SitesRepository.GetSites();
+            this.DefaultViewModel["Sites"] = sites;
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
             var sampleDataGroups = await SampleDataSource.GetGroupsAsync();
             this.DefaultViewModel["Groups"] = sampleDataGroups;

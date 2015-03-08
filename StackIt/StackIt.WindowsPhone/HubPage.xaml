@@ -33,6 +33,13 @@
                 </Grid>
             </DataTemplate>
 
+            <DataTemplate x:Key="NetworkSitesTemplate">
+                <Grid Margin="0,0,9.5,9.5" Background="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}">
+                    <Image Source="{Binding ImagePath}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}" Height="138.5" Width="138.5"/>
+                    <TextBlock Text="{Binding name}" VerticalAlignment="Bottom" Margin="9.5,0,0,6.5" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{Binding styling.tag_foreground_color}"/>
+                </Grid>
+            </DataTemplate>
+
             <DataTemplate x:Key="StandardTripleLineItemTemplate">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -71,7 +78,29 @@
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
-        <Hub x:Name="Hub" x:Uid="Hub" Header="application name" Background="{ThemeResource HubBackgroundImageBrush}">
+        <Hub x:Name="Hub" x:Uid="Hub" Header="StackIt" Background="{ThemeResource HubBackgroundImageBrush}">
+            <HubSection x:Uid="HubSection0" Header="Network" Width="Auto"
+                         DataContext="{Binding Sites}" d:DataContext="{Binding Source={d:DesignData Source=../StackIt.Shared/DataModel/sites.json, Type=data:SitesCollection}}" HeaderTemplate="{ThemeResource HubSectionHeaderTemplate}">
+                <DataTemplate>
+                    <GridView
+                        Margin="0,9.5,0,0"
+                        ItemsSource="{Binding}"
+                        AutomationProperties.AutomationId="ItemGridView"
+                        AutomationProperties.Name="Items In Group"
+                        ItemTemplate="{StaticResource NetworkSitesTemplate}"
+                        SelectionMode="None"
+                        IsItemClickEnabled="True"
+                        ItemClick="ItemView_ItemClick"
+                        ContinuumNavigationTransitionInfo.ExitElementContainer="True">
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid />
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+                    </GridView>
+                </DataTemplate>
+            </HubSection>
+
             <HubSection x:Uid="HubSection1" Header="SECTION 1" DataContext="{Binding Groups}" HeaderTemplate="{ThemeResource HubSectionHeaderTemplate}">
                 <DataTemplate>
                     <ListView
