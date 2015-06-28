@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using Windows.Storage;
+using System.Linq;
 
 namespace StackIt.Data {
-    public class SitesRepository {
-        public ObservableCollection<Site> items { get; set; }
-        public static async Task<IEnumerable<Site>> GetSites() {
+    public class SitesRepository : Response<Site> {
+        public static async Task<IEnumerable<Site>> AllSites() {
             string jsonText = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///DataModel/sites.json")));
-            return JsonConvert.DeserializeObject<Sites>(jsonText).items;
+            return JsonConvert.DeserializeObject<Response<Site>>(jsonText).items;
+        }
+        public static async Task<IEnumerable<Site>> MainSites() {
+            return (await AllSites()).Where(s => s.site_type != "meta_site");
         }
     }
 }

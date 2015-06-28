@@ -23,19 +23,16 @@ using Windows.UI.Xaml.Navigation;
 
 // The Universal Hub Application project template is documented at http://go.microsoft.com/fwlink/?LinkID=391955
 
-namespace StackIt
-{
+namespace StackIt {
     /// <summary>
     /// A page that displays a grouped collection of items.
     /// </summary>
-    public sealed partial class HubPage : Page
-    {
+    public sealed partial class HubPage : Page {
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
-        public HubPage()
-        {
+        public HubPage() {
             this.InitializeComponent();
 
             // Hub is only supported in Portrait orientation
@@ -51,8 +48,7 @@ namespace StackIt
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
         /// </summary>
-        public NavigationHelper NavigationHelper
-        {
+        public NavigationHelper NavigationHelper {
             get { return this.navigationHelper; }
         }
 
@@ -60,8 +56,7 @@ namespace StackIt
         /// Gets the view model for this <see cref="Page"/>.
         /// This can be changed to a strongly typed view model.
         /// </summary>
-        public ObservableDictionary DefaultViewModel
-        {
+        public ObservableDictionary DefaultViewModel {
             get { return this.defaultViewModel; }
         }
 
@@ -76,9 +71,8 @@ namespace StackIt
         /// <see cref="Frame.Navigate(Type, object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
-        {
-            var sites = await SitesRepository.GetSites();
+        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e) {
+            var sites = await SitesRepository.MainSites();
             this.DefaultViewModel["Sites"] = sites;
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
             var sampleDataGroups = await SampleDataSource.GetGroupsAsync();
@@ -93,8 +87,7 @@ namespace StackIt
         /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
         /// <param name="e">Event data that provides an empty dictionary to be populated with
         /// serializable state.</param>
-        private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
-        {
+        private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e) {
             // TODO: Save the unique state of the page here.
         }
 
@@ -103,11 +96,9 @@ namespace StackIt
         /// </summary>
         /// <param name="sender">The source of the click event.</param>
         /// <param name="e">Details about the click event.</param>
-        private void GroupSection_ItemClick(object sender, ItemClickEventArgs e)
-        {
+        private void GroupSection_ItemClick(object sender, ItemClickEventArgs e) {
             var groupId = ((SampleDataGroup)e.ClickedItem).UniqueId;
-            if (!Frame.Navigate(typeof(SectionPage), groupId))
-            {
+            if (!Frame.Navigate(typeof(SectionPage), groupId)) {
                 throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
             }
         }
@@ -117,11 +108,9 @@ namespace StackIt
         /// </summary>
         /// <param name="sender">The source of the click event.</param>
         /// <param name="e">Defaults about the click event.</param>
-        private void ItemView_ItemClick(object sender, ItemClickEventArgs e)
-        {
+        private void ItemView_ItemClick(object sender, ItemClickEventArgs e) {
             var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            if (!Frame.Navigate(typeof(ItemPage), itemId))
-            {
+            if (!Frame.Navigate(typeof(ItemPage), itemId)) {
                 throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
             }
         }
@@ -140,13 +129,11 @@ namespace StackIt
         /// </para>
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
             this.navigationHelper.OnNavigatedTo(e);
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
+        protected override void OnNavigatedFrom(NavigationEventArgs e) {
             this.navigationHelper.OnNavigatedFrom(e);
         }
 
