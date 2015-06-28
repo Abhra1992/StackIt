@@ -8,6 +8,7 @@
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     d:DataContext="{Binding Source={d:DesignData Source=../StackIt.Shared/DataModel/SampleData.json, Type=data:SampleDataSource}}"
     xmlns:data="using:StackIt.Data"
+    xmlns:api="using:StackIt.API"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -33,6 +34,13 @@
                 </Grid>
             </DataTemplate>
 
+            <DataTemplate x:Key="NetworkSitesTemplate">
+                <Grid Margin="0,0,9.5,9.5" Background="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}">
+                    <Image Source="{Binding high_resolution_icon_url}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}" Height="138.5" Width="138.5"/>
+                    <TextBlock Text="{Binding name}" VerticalAlignment="Bottom" Margin="9.5,0,0,6.5" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{Binding styling.tag_foreground_color}"/>
+                </Grid>
+            </DataTemplate>
+
             <DataTemplate x:Key="StandardTripleLineItemTemplate">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -47,6 +55,24 @@
                         <TextBlock Text="{Binding Title}" Style="{ThemeResource ListViewItemTextBlockStyle}"/>
                         <TextBlock Text="{Binding Description}" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Foreground="{ThemeResource PhoneMidBrush}" />
                         <TextBlock Text="{Binding Subtitle}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="NetworkSitesItemTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Background="{Binding tag_background_color}" Margin="0,9.5,0,0" Grid.Column="0" HorizontalAlignment="Left">
+                        <Image Source="{Binding high_resolution_icon_url}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}" Height="79" Width="79"/>
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="14.5,0,0,0">
+                        <TextBlock Text="{Binding name}" Style="{ThemeResource ListViewItemTextBlockStyle}" Foreground="{Binding tag_foreground_color}"/>
+                        <TextBlock Text="{Binding twitter_account}" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Foreground="{ThemeResource PhoneMidBrush}"/>
+                        <TextBlock Text="{Binding site_url}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Foreground="{Binding tag_foreground_color}"/>
                     </StackPanel>
                 </Grid>
             </DataTemplate>
@@ -71,7 +97,24 @@
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
-        <Hub x:Name="Hub" x:Uid="Hub" Header="application name" Background="{ThemeResource HubBackgroundImageBrush}">
+        <Hub x:Name="Hub" x:Uid="Hub" Header="StackIt" Background="{ThemeResource HubBackgroundImageBrush}">
+            <HubSection x:Uid="HubSection0" Header="Stack Exchange Network"
+                        DataContext="{Binding Sites}" HeaderTemplate="{ThemeResource HubSectionHeaderTemplate}"
+                        d:DataContext="{Binding items, Source={d:DesignData Source=../StackIt.Shared/DataModel/sites.json, Type=data:SitesRepository}}">
+                <DataTemplate>
+                    <ListView 
+                        AutomationProperties.AutomationId="ItemListViewSection3"
+                        AutomationProperties.Name="Items In Group"
+                        SelectionMode="None"
+                        IsItemClickEnabled="True"
+                        ItemsSource="{Binding}"
+                        ItemTemplate="{StaticResource NetworkSitesItemTemplate}"
+                        ItemClick="ItemView_ItemClick"
+                        ContinuumNavigationTransitionInfo.ExitElementContainer="True">
+                    </ListView>
+                </DataTemplate>
+            </HubSection>
+
             <HubSection x:Uid="HubSection1" Header="SECTION 1" DataContext="{Binding Groups}" HeaderTemplate="{ThemeResource HubSectionHeaderTemplate}">
                 <DataTemplate>
                     <ListView
